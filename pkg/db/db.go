@@ -1,34 +1,39 @@
 package db
 
 import (
-	"fmt"
+	"io"
+	"log"
+	"os"
 	"time"
 
-	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+
+	mylogger "github.com/shlyyy/micro-services/pkg/logger"
 )
 
-type DBConfig struct {
-	Host     string
-	Port     int
-	UserName string
-	Password string
-	DBName   string
-}
+var DB *gorm.DB
 
-func InitDB(cfg DBConfig) error {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		cfg.UserName, cfg.Password, cfg.Host, cfg.Port, cfg.DBName)
+func InitDB(dsn string) error {
+	logFilePath := "gorm.log"
+	logFile, err := os.OpenFile(logFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		return err
+	}
+	defer logFile.Close()
+
+	multiWriter := io.MultiWriter(os.Stdout, logFile)
+	gormStdLogger := log.New(multiWriter, "\r\n", log.LstdFlags)
 
 	newLogger := logger.New(
-		zap.NewExample(), // 可替换为 zap.L()
+		gormStdLogger,
 		logger.Config{
 			SlowThreshold:             time.Second,
 			LogLevel:                  logger.Info,
 			IgnoreRecordNotFoundError: true,
-			Colorful:                  false,
+			ParameterizedQueries:      true,
+			Colorful:                  true,
 		},
 	)
 
@@ -36,12 +41,12 @@ func InitDB(cfg DBConfig) error {
 		Logger: newLogger,
 	})
 	if err != nil {
+		mylogger.Error("MySQL connection failed:", err)
 		return err
 	}
 
-	// 自动迁移（可选）
-	// db.AutoMigrate(&model.Account{})
+	DB = db
 
-	zap.L().Info("✅ MySQL connected")
+	mylogger.Info("MySQL connected")
 	return nil
 }

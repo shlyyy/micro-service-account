@@ -1,23 +1,22 @@
 package jwt
 
 import (
-	"github.com/dgrijalva/jwt-go"
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
 )
 
-type CustomClaims struct {
-	jwt.StandardClaims
-	Id          int32
-	NikeName    string
-	AuthorityId int32
+type JWTManager struct {
+	secret string
 }
 
-var jwtSecret []byte
+func New(secret string) *JWTManager { return &JWTManager{secret: secret} }
 
-func InitJWT(cfg JWTConfig) {
-	jwtSecret = []byte(cfg.SingingKey)
-}
-
-func GenerateJWT(claims CustomClaims) (string, error) {
+func (j *JWTManager) Generate(userID uint, expire time.Duration) (string, error) {
+	claims := jwt.MapClaims{
+		"user_id": userID,
+		"exp":     time.Now().Add(expire).Unix(),
+	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtSecret)
+	return token.SignedString([]byte(j.secret))
 }

@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+database:
+  dsn: "user:password@tcp(localhost:3306)/demo?charset=utf8mb4&parseTime=True&loc=Local"
+
+jwt:
+  secret: "mysecret"
+
+logger:
+  level: "debug"
+  filename: "./logs/app.log"
+  max_size: 50
+  max_backups: 7
+  max_age: 30
+  compress: true
+  console: true
+  json: false
+  color: true
