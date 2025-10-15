@@ -1,5 +1,9 @@
-server:
-  port: 8080
+account:
+  account_server:
+    grpc_server_port: 23500
+  account_web:
+    port: 23501
+
 
 database:
   username: "root"

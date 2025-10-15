@@ -2,11 +2,15 @@ package main
 
 import (
 	"fmt"
+	"net"
 
+	accountpb "github.com/shlyyy/micro-services/api/gen"
 	"github.com/shlyyy/micro-services/internal/account/model"
+	"github.com/shlyyy/micro-services/internal/account/service"
 	"github.com/shlyyy/micro-services/pkg/config"
 	"github.com/shlyyy/micro-services/pkg/db"
 	"github.com/shlyyy/micro-services/pkg/logger"
+	"google.golang.org/grpc"
 )
 
 func main() {
@@ -30,6 +34,24 @@ func main() {
 		return
 	}
 	logger.Info("account 表初始化成功")
+
+	// 初始化服务
+	accountService := &service.AccountService{DB: db.GetDB()}
+
+	// 启动 gRPC 服务器
+	port := config.Cfg.Account.AccountServer.GrpcServerPort
+	logger.Infof("启动 gRPC 服务器，监听端口: %d", port)
+	listen, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
+	if err != nil {
+		logger.Errorf("无法监听端口: %v", err)
+		return
+	}
+
+	grpcServer := grpc.NewServer()
+	accountpb.RegisterAccountServiceServer(grpcServer, accountService)
+	if err := grpcServer.Serve(listen); err != nil {
+		logger.Errorf("启动 gRPC 服务失败: %v", err)
+	}
 
 	logger.Info("account_srv 服务已启动")
 

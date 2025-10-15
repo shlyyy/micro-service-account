@@ -10,9 +10,14 @@ import (
 )
 
 type AppConfig struct {
-	Server struct {
-		Port int `mapstructure:"port"`
-	} `mapstructure:"server"`
+	Account struct {
+		AccountServer struct {
+			GrpcServerPort int `mapstructure:"grpc_server_port"`
+		} `mapstructure:"account_server"`
+		AccountWeb struct {
+			Port int `mapstructure:"port"`
+		} `mapstructure:"account_web"`
+	} `mapstructure:"account"`
 	JWT struct {
 		Secret string `mapstructure:"secret"`
 	} `mapstructure:"jwt"`
