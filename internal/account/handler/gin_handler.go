@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -8,6 +9,8 @@ import (
 	"github.com/shlyyy/micro-service-account/api/accountpb"
 	"github.com/shlyyy/micro-service-account/internal/account/middleware"
 	jwtutil "github.com/shlyyy/micro-service-account/pkg/jwt"
+
+	"github.com/mojocn/base64Captcha"
 )
 
 func NewAccountHandler(r *gin.Engine, client accountpb.AccountServiceClient) {
@@ -76,6 +79,24 @@ func NewAccountHandler(r *gin.Engine, client accountpb.AccountServiceClient) {
 		c.JSON(200, gin.H{
 			"message": "登录成功",
 			"token":   token,
+		})
+	})
+
+	// 验证码接口
+	r.GET("/captcha", func(c *gin.Context) {
+		var captchaStore = base64Captcha.DefaultMemStore
+		driver := base64Captcha.NewDriverDigit(80, 240, 6, 0.7, 80)
+		captcha := base64Captcha.NewCaptcha(driver, captchaStore)
+
+		id, b64s, answer, err := captcha.Generate()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "验证码生成失败"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"captcha_id":     id,
+			"captcha_image":  b64s, // Base64 格式图片
+			"captcha_answer": answer,
 		})
 	})
 }
