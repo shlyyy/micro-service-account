@@ -1,0 +1,16 @@
+version: '3.8'
+
+# 启动 docker-compose up -d
+services:
+  mysql8:
+    image: mysql:latest
+    container_name: mysql8
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456     # 设置root密码
+    ports:
+      - "3306:3306"                   # 宿主机3306映射到容器3306
+    volumes:
+      - ./mysql/data:/var/lib/mysql         # 数据持久化
+      - ./mysql/conf:/etc/mysql/conf.d      # 自定义配置
+      - ./mysql/logs:/var/log/mysql         # 日志

@@ -14,7 +14,7 @@ func TestLogger(t *testing.T) {
 		JsonFormat: false,
 	}
 
-	Init(cfg)
+	InitLogger(cfg)
 	Info("info message")
 	Debug("debug message")
 	Error("error message")

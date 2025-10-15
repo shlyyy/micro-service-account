@@ -27,7 +27,7 @@ type LogConfig struct {
 	Color      bool   `mapstructure:"color"`
 }
 
-func Init(cfg LogConfig) {
+func InitLogger(cfg LogConfig) {
 	once.Do(func() {
 		level := parseLevel(cfg.Level)
 		encoderCfg := zapcore.EncoderConfig{
