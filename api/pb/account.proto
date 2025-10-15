@@ -21,7 +21,7 @@ message AccountRes{
   int32 id=1;
   string mobile=2;
   string password=3;
-  string nikename=4;
+  string nickname=4;
   string gender=5;
   uint32 role=6;
 }
@@ -42,7 +42,7 @@ message IdRequest{
 message AddAccountRequest{
   string mobile=1;
   string password=2;
-  string nikeName=3;
+  string nickname=3;
   string gender=4;
 }
 
@@ -50,7 +50,7 @@ message UpdateAccountRequest{
   uint32 id=1;
   string mobile=2;
   string password=3;
-  string nikeName=4;
+  string nickname=4;
   string gender=5;
   uint32 role=6;
 }

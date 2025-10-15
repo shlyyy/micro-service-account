@@ -22,7 +22,7 @@ database:
 
 
 jwt:
-  secret: "mysecret"
+  secret: "34ed12de9dbd2a72d6486790efe116ac"
 
 logger:
   level: "debug"

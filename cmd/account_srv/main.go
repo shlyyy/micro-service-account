@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/shlyyy/micro-services/api/accountpb"
-	"github.com/shlyyy/micro-services/internal/account/migration"
-	"github.com/shlyyy/micro-services/internal/account/service"
-	"github.com/shlyyy/micro-services/pkg/config"
-	"github.com/shlyyy/micro-services/pkg/db"
-	"github.com/shlyyy/micro-services/pkg/logger"
+	"github.com/shlyyy/micro-service-account/api/accountpb"
+	"github.com/shlyyy/micro-service-account/internal/account/migration"
+	"github.com/shlyyy/micro-service-account/internal/account/service"
+	"github.com/shlyyy/micro-service-account/pkg/config"
+	"github.com/shlyyy/micro-service-account/pkg/db"
+	"github.com/shlyyy/micro-service-account/pkg/logger"
 	"google.golang.org/grpc"
 )
 

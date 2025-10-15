@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 
-	mylogger "github.com/shlyyy/micro-services/pkg/logger"
+	mylogger "github.com/shlyyy/micro-service-account/pkg/logger"
 )
 
 var DB *gorm.DB

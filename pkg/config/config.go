@@ -4,8 +4,8 @@ import (
 	"path/filepath"
 
 	"github.com/fsnotify/fsnotify"
-	"github.com/shlyyy/micro-services/pkg/db"
-	"github.com/shlyyy/micro-services/pkg/logger"
+	"github.com/shlyyy/micro-service-account/pkg/db"
+	"github.com/shlyyy/micro-service-account/pkg/logger"
 	"github.com/spf13/viper"
 )
 

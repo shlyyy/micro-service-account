@@ -6,9 +6,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/shlyyy/micro-services/api/accountpb"
-	"github.com/shlyyy/micro-services/internal/account/model"
-	"github.com/shlyyy/micro-services/pkg/db"
+	"github.com/shlyyy/micro-service-account/api/accountpb"
+	"github.com/shlyyy/micro-service-account/internal/account/model"
+	"github.com/shlyyy/micro-service-account/pkg/db"
 
 	"github.com/anaskhan96/go-password-encoder"
 
@@ -53,7 +53,7 @@ func Model2Pb(account model.Account) *accountpb.AccountRes {
 		Id:       int32(account.ID),
 		Mobile:   account.Mobile,
 		Password: account.Password,
-		Nikename: account.NikeName,
+		Nickname: account.Nickname,
 		Gender:   account.Gender,
 		Role:     uint32(account.Role),
 	}
@@ -112,7 +112,7 @@ func (s *AccountService) AddAccount(ctx context.Context, req *accountpb.AddAccou
 	}
 	// 创建账户
 	account.Mobile = req.Mobile
-	account.NikeName = req.NikeName
+	account.Nickname = req.Nickname
 	account.Role = 1
 	options := password.Options{
 		SaltLen:      16,
@@ -141,7 +141,7 @@ func (s *AccountService) UpdateAccount(ctx context.Context, req *accountpb.Updat
 	}
 
 	account.Mobile = req.Mobile
-	account.NikeName = req.NikeName
+	account.Nickname = req.Nickname
 	account.Gender = req.Gender
 
 	r := db.GetDB().Save(&account)

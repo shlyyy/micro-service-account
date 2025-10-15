@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/shlyyy/micro-services/api/accountpb"
-	"github.com/shlyyy/micro-services/internal/account/handler"
-	"github.com/shlyyy/micro-services/pkg/config"
-	"github.com/shlyyy/micro-services/pkg/logger"
+	"github.com/shlyyy/micro-service-account/api/accountpb"
+	"github.com/shlyyy/micro-service-account/internal/account/handler"
+	"github.com/shlyyy/micro-service-account/pkg/config"
+	"github.com/shlyyy/micro-service-account/pkg/logger"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"

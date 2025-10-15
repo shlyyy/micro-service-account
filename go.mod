@@ -1,4 +1,4 @@
-module github.com/shlyyy/micro-services
+module github.com/shlyyy/micro-service-account
 
 go 1.25.2
 
