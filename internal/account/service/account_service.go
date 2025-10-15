@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 
-	accountpb "github.com/shlyyy/micro-services/api/gen"
+	"github.com/shlyyy/micro-services/api/accountpb"
 	"github.com/shlyyy/micro-services/internal/account/model"
 	"github.com/shlyyy/micro-services/pkg/db"
 

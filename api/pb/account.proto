@@ -1,6 +1,7 @@
 syntax="proto3";
 
-option go_package="./gen/;accountpb";
+// protoc -I=./api/pb --go_out=./api/ --go-grpc_out=./api/ account.proto
+option go_package="./accountpb/;accountpb";
 
 service AccountService{
   rpc GetAccountList(PagingRequest) returns (AccountListRes);

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net"
 
-	accountpb "github.com/shlyyy/micro-services/api/gen"
-	"github.com/shlyyy/micro-services/internal/account/model"
+	"github.com/shlyyy/micro-services/api/accountpb"
+	"github.com/shlyyy/micro-services/internal/account/migration"
 	"github.com/shlyyy/micro-services/internal/account/service"
 	"github.com/shlyyy/micro-services/pkg/config"
 	"github.com/shlyyy/micro-services/pkg/db"
@@ -29,7 +29,7 @@ func main() {
 	}
 	logger.Info("数据库初始化成功")
 
-	if err := initAccountTable(); err != nil {
+	if err := migration.InitAccountTable(); err != nil {
 		logger.Error("初始化 account 表失败:", err)
 		return
 	}
@@ -37,6 +37,9 @@ func main() {
 
 	// 初始化服务
 	accountService := &service.AccountService{DB: db.GetDB()}
+	grpcServer := grpc.NewServer()
+
+	accountpb.RegisterAccountServiceServer(grpcServer, accountService)
 
 	// 启动 gRPC 服务器
 	port := config.Cfg.Account.AccountServer.GrpcServerPort
@@ -47,34 +50,9 @@ func main() {
 		return
 	}
 
-	grpcServer := grpc.NewServer()
-	accountpb.RegisterAccountServiceServer(grpcServer, accountService)
+	logger.Info("account_srv 服务已启动")
+
 	if err := grpcServer.Serve(listen); err != nil {
 		logger.Errorf("启动 gRPC 服务失败: %v", err)
 	}
-
-	logger.Info("account_srv 服务已启动")
-
-	select {}
-}
-
-// 初始化 account 表
-func initAccountTable() error {
-	db := db.GetDB()
-	db.Migrator().DropTable(&model.Account{})
-	if err := db.AutoMigrate(&model.Account{}); err != nil {
-		return err
-	}
-
-	// 插入模拟数据
-	accounts := []model.Account{
-		{Mobile: "13800000000", Password: "password123", NikeName: "User1", Salt: "salt123", Gender: "male", Role: 1},
-		{Mobile: "13800000001", Password: "password123", NikeName: "User2", Salt: "salt123", Gender: "female", Role: 2},
-		{Mobile: "13800000002", Password: "password123", NikeName: "User3", Salt: "salt123", Gender: "male", Role: 1},
-		{Mobile: "13800000003", Password: "password123", NikeName: "User4", Salt: "salt123", Gender: "female", Role: 2},
-	}
-	if err := db.Create(&accounts).Error; err != nil {
-		return err
-	}
-	return nil
 }

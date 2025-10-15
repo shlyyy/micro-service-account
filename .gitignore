@@ -19,6 +19,7 @@ mysql/
 
 # protoc 生成的文件
 gen/
+accountpb/
 
 # 编译文件 #
 ###################
