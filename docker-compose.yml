@@ -6,9 +6,21 @@ services:
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: 123456     # 设置root密码
+      MYSQL_DATABASE: account_srv_db  # 初始时创建的数据库
     ports:
       - "3306:3306"                   # 宿主机3306映射到容器3306
     volumes:
-      - ~/mysql8/data:/var/lib/mysql         # 数据持久化
-      - ~/mysql8/conf:/etc/mysql/conf.d      # 自定义配置
-      - ~/mysql8/logs:/var/log/mysql         # 日志
+      - ~/mysql8_data/data:/var/lib/mysql         # 数据持久化
+      - ~/mysql8_data/conf:/etc/mysql/conf.d      # 自定义配置
+      - ~/mysql8_data/logs:/var/log/mysql         # 日志
+
+  redis:
+    image: redis:latest
+    container_name: myredis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"                    # 宿主机6379映射到容器6379
+    volumes:
+      - ~/redis_data/data:/data                 # 数据持久化
+      - ~/redis_data/conf:/usr/local/etc/redis  # 自定义配置
+      
